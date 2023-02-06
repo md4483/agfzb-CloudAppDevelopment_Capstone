@@ -15,27 +15,57 @@
 
     <body>
     <!--Add a nav bar here -->
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" disabled>Best Cars Dealership</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-lg bg-light">   
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="nav nav-pills">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
-              </li>
+        </button>
+        <a class="navbar-brand" disabled>Best Cars Dealership</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav nav-pills mr-auto mt-2 mt-lg-0"">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                </li>
             </ul>
-          </div>
-        </div>
+
+            <form class="form-inline my-2 my-lg-0" action="{% url 'djangoapp:login' %}" method="post">
+            {% if user.is_authenticated %}
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" disabled">{{user.username}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    </li>
+                </ul>
+            {% else %}
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                    <input type="password" class="form-control" placeholder="Password" name="password" >
+                    <button class="btn btn-primary ml-1" type="submit">Login</button>
+                    <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                </div>
+            {% endif %}
+            </form>
+        </div>         
     </nav>
+
+    {% if message %}
+    <div class="container-fluid">
+        <div class="alert alert-success mt-2">
+            {{ message }}
+        </div>
+    </div>
+    {% endif %}
+   
+
     <!--Add a dealer table here -->
 
     </body>
