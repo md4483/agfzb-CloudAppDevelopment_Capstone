@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
-
 # Create an `about` view to render a static about page
 def about(request):
     context = {}
@@ -102,6 +101,16 @@ def get_dealer_details(request, dealer_id):
 # ...
 def add_review(request, dealer_id):    
     context = {}
+    if request.method == 'GET':
+        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/9e5a21cb-e2b3-457f-bc1c-064d900cb0ea/dealership-package/post_review"
+        carList = CarModel.objects.filter(dealer_id=dealer_id)
+        context = {
+            "dealer_id": dealer_id,
+            "dealer_name": get_dealers_from_cf(url)[dealer_id].full_name,
+            "cars": carList
+        }
+        return render(request, 'djangoapp/add_review.html', context)
+    
     if request.method == 'POST':
         if request.user.is_authenticated:
             review = {}

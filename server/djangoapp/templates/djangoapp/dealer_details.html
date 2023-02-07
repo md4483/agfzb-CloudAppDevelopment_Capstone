@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         {% load static %}
-        <title>Best Cars Dealership | Details</title>
+        <title>{{dealership.0.full_name}} | Best Cars Dealership</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> 
     </head>
 
@@ -50,29 +50,64 @@
         </div>         
     </nav>
     
-
     <div class="container-fluid">
         <div class="row my-3 mx-3">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        About Us
+                        {{dealership.0.full_name}}
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.</p>
+                        <p class="card-text">
+                            {{dealership.0.address}}</br/>
+                            {{dealership.0.city}}<br/>
+                            {{dealership.0.st}} {{dealership.0.zip}}
+                        </p>
                     </div>
+                    <div class="card-footer">
+                        Reviews
+                    </div>
+                    <div class="card-body">
+                        <div class="card-columns">
+                            {% if reviews %}
+                            {% for review in reviews %}       
+                                <div class="card" >   
+                                    <div class="row my-3"> 
+                                    <div class="col-3 text-center">
+                                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" width="40" height="40">
+                                    </div>          
+                                    <div class="col-9">
+                                        <h5 class="card-title">{{review.review}}</h5>
+                                        <p class="card-text"></p>
+                                    </div>
+                                    </div>
+                                     <div class="card-footer text-muted text-right" style="min-height: 2em">
+                                        {{review.name}}
+                                        {% if review.purchase == True %}   
+                                            <br/>{{review.car_year}} {{review.car_make}} {{review.car_model}}
+                                            <br/>Purchased {{review.purchase_date}}
+                                        {% endif %}
+                                    </div>
+                                </div>            
+                            {% endfor %}  
+                            {% else %}
+                                <p class="card-text">No reviews</p>
+                            {% endif %}
+                       </div> 
+                    </div>
+                    {% if user.is_authenticated %} 
+                    <div class="card-footer text-center">
+                        <a class="btn btn-primary" type="submit" href="{% url 'djangoapp:add_review' dealership.0.id %}">Add a Review</a>            
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
-    {% if user.is_authenticated %} 
-    <div class="card">
-       <div class="card-body text-center">
-               <a class="btn btn-primary" type="submit" href="{% url 'djangoapp:add_review' dealer_id %}">Add a new Review</a>               
-       </div>            
-   </div>
-   {% endif %}
+
+
+    
 
 
     </body>
