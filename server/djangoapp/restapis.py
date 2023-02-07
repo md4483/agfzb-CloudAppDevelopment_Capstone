@@ -34,9 +34,7 @@ def post_request(url, json_payload, **kwargs):
         response = requests.post(url, params=kwargs, json=json_payload)
     except Exception as e:
         print("Error", e)
-    print("Status ", {response.status_code})
-    json_data = json.loads(response.text)
-    return json_data
+    return response
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -77,7 +75,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
             # Create a CarDealer object with values in `doc` object
             if "purchase_date" in review:
                 review_obj = DealerReview(dealership=review["dealership"], name=review["name"], 
-                    purchase=review["purchase"], review=review["review"], id=review["id"],
+                    purchase=review["purchase"], review=review["review"],
                     purchase_date=review["purchase_date"], car_make=review["car_make"], 
                     car_model=review["car_model"], car_year=review["car_year"])
             else:
