@@ -112,34 +112,41 @@ def add_review(request, dealer_id):
         return render(request, 'djangoapp/add_review.html', context)
     
     if request.method == 'POST':
-        if request.user.is_authenticated:
+        if (request.user.is_authenticated):
             review = {}
-            review["time"] = datetime.itcow().isoformat()
-            review["name"] = request.user.first_name + " " + request.user.last_name
-            review["dealership"] = dealer_id
-            review["review"] = request.POST["content"]
-            if "is_purchased" in request.POST:
-                review["purchase"] = True
-            else:
-                review["purchase"] = False
-            if review["purchase"] is True:
-                review["purchase_date"] = request.POST["purchase_date"] 
-                review["car_make"] = request.POST["car_make"] 
-                review["car_model"] = request.POST["car_model"] 
-                review["car_year"] = request.POST["car_year"] 
-            else:
-                review["purchase_date"] = None
-                review["car_make"] = None
-                review["car_model"] = None
-                review["car_year"] = None
+            review['name'] = request.user.first_name + ' ' + request.user.last_name
+            review['dealership'] = dealer_id
+            review['review'] = request.POST['review']
 
-            url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/9e5a21cb-e2b3-457f-bc1c-064d900cb0ea/dealership-package/post_review"
-            json_payload  = {}
-            json_payload["review"] = review
-            json_result = post_request(url, json_payload)
-            print(json_result)
-            if "error" in json_result:
-                context["message"] = "An error occured on submitting a review."
+            if 'purchase' in request.POST:
+                review['purchase'] = "true"
             else:
-                context["message"] = "Review submitted successfully"
-        return HttpResponse(context['reviews'])
+                review['purchase'] = "false"
+
+            if review['purchase'] is True:
+                if request.POST['car_purchased']:
+                    car = request.POST['car_purchased'].split('!!')
+                    review['car_make'] = car[0]
+                    review['car_model'] = car[1]
+                    review['car_year'] = car[2]
+                else:
+                    review['car_make'] = ' '
+                    review['car_model'] = ' '
+                    review['car_year'] = ' '
+
+                review['purchase_date'] = request.POST['purchase_date']
+            else:
+                review['purchase_date'] = ' '
+                review['car_make'] = ' '
+                review['car_model'] = ' '
+                review['car_year'] = ' '
+            
+            url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/9e5a21cb-e2b3-457f-bc1c-064d900cb0ea/dealership-package/post_review"
+            json_payload = review
+            json_result = post_request(url, json_payload)
+
+            if 'error' in json_result:
+                context['message'] = "An error occurred submitting your review"
+            else:
+                context['message'] = "Review submitted successfully"
+        return redirect('djangoapp:dealer_details', dealer_id=dealer_id)
