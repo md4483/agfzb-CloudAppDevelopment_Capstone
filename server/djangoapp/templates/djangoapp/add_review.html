@@ -4,10 +4,10 @@
         <meta charset="UTF-8">
         {% load static %}
         <title>Add Review | Best Cars Dealership</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>    
     </head>
 
@@ -74,11 +74,11 @@
                             <div class="form-group row">
                                 <label for="puchase" class="col-sm-2 col-form-label">Purchased car here?</label>
                                 <div class="col-sm-10 mt-2 custom-control custom-switch">
-                                    <input class="form-check-input" type="checkbox" data-toggle="collapse" data-target="#collapsePurchase" name="purchase" id="purchase" aria-expanded="false" aria-controls="collapsePurchase">
+                                    <input class="form-check-input" type="checkbox" data-toggle="collapse" data-target="#collapse_purchase" name="purchase" id="purchase" aria-expanded="false" aria-controls="collapse_purchase">
                                 </div>
                             </div>
 
-                            <div class="collapse" id="collapsePurchase">
+                            <div class="collapse" id="collapse_purchase">
                                 <div class="form-group row">
                                     <label for="car_purchased" class="col-sm-2 col-form-label">Car purchased</label>
                                     {% if cars %}
