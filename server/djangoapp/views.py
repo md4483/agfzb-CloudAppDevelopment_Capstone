@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarModel
 from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -102,12 +102,12 @@ def get_dealer_details(request, dealer_id):
 def add_review(request, dealer_id):    
     context = {}
     if request.method == 'GET':
-        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/9e5a21cb-e2b3-457f-bc1c-064d900cb0ea/dealership-package/post_review"
-        carList = CarModel.objects.filter(dealer_id=dealer_id)
+        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/9e5a21cb-e2b3-457f-bc1c-064d900cb0ea/dealership-package/get-dealership"
+        cars = CarModel.objects.filter(dealer_id=dealer_id)
         context = {
             "dealer_id": dealer_id,
-            "dealer_name": get_dealers_from_cf(url)[dealer_id].full_name,
-            "cars": carList
+            "dealer_name": get_dealers_from_cf(url)[0].full_name,
+            "cars": cars
         }
         return render(request, 'djangoapp/add_review.html', context)
     

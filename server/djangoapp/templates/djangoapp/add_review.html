@@ -60,61 +60,57 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        About Us
+                        {{dealer_name}}
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.</p>
+                        <form class="form-group" action="{% url 'djangoapp:add_review' dealer_id %}"  method="post">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <label for="review" class="col-sm-2 col-form-label">Review</label>
+                                <div class="col-sm-10 mt-2">
+                                    <textarea class="form-control" style="min-height: 5em;" id="review" name="review" rows="5" required placeholder="Review"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="puchase" class="col-sm-2 col-form-label">Purchased car here?</label>
+                                <div class="col-sm-10 mt-2 custom-control custom-switch">
+                                    <input class="form-check-input" type="checkbox" data-toggle="collapse" data-target="#collapsePurchase" name="purchase" id="purchase" aria-expanded="false" aria-controls="collapsePurchase">
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapsePurchase">
+                                <div class="form-group row">
+                                    <label for="car_purchased" class="col-sm-2 col-form-label">Car purchased</label>
+                                    {% if cars %}
+                                    <div class="col-sm-10 mt-2">
+                                        <select name="car_purchased" id="car_purchased" class="form-select" required>
+                                            {% for car in cars %}
+                                                <option selected value="{{car.make.name}}-{{car.name}}-{{ car.year|date:'Y' }}">{{car.make.name}} {{car.name}} ({{ car.year|date:"Y" }})</option>
+                                            {% endfor %}
+                                        </select>  
+                                    </div>
+                                    {% else %}
+                                    <div class="col-sm-10 mt-2">
+                                        <p class="text-muted">No cars registered at this dealership</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group row">
+                                    <label for="purchase_date" class="col-sm-2 col-form-label">Purchase date</label>
+                                    <div class="col-sm-10 mt-2">
+                                        <input class="form-control" type="date" name="purchase_date" id="purchase_date"> 
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary mt-3" type="submit">Add review</button>  
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="container">
-        <form class="form-group" action="{% url 'djangoapp:add_review' dealer_id %}"  method="post">
-            {% csrf_token %}
-            <div class="col-md-12">
-            <h1 class="text-center">Add a Review for <b>{{dealer_name}}</b></h1><br>
-            <label for="content"><b>Enter the Review content</b></label>
-            <br>
-            <textarea class="form-control" style="min-height: 100px;" id="content" name="content" rows="2" required placeholder="Your review"></textarea>
-            <br>
-            </div>
-            {% if cars %}
-            <div class="col-md-12">
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" name="is_purchased" id="is_purchased">
-                <label class="form-check-label" for="is_purchased">
-                  Yes, I've purchased a car from {{dealer_name}} 
-                </label>
-                <label class="text-muted">(fill the insformation about your purchase below)</label>
-                </div>
-            
-                <label for="car"><b>What did you purchase?</b></label>
-                <br>
-                <select name="car" id="car" class="form-select" required>
-                {% for car in cars %}
-                    <option selected value="{{car.make.name}}-{{car.name}}-{{ car.year|date:'Y' }}">{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
-                {% endfor %}
-                </select>            
-                <br>
-            </div>
-            <div class="col-md-3">
-                <label for="purchase_date"><b>Purchase Date</b></label>            
-                <input class="form-control" type="date" name="purchase_date" id="purchase_date">
-                <br>  
-            </div>
-            {% else %}
-            <div class="col-md-3">
-                <label for="purchase_date"><b>This dealer doesn't have any cars</b></label>            
-                <br>  
-            </div>
-            {% endif %}
-            <div class="col-md-3">
-                <button class="btn btn-primary" type="submit">Submit</button>  
-            </div>
-        </form>
 
 
     </body>
